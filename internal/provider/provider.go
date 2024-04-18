@@ -4,6 +4,7 @@ import (
 	"context"
 
 	"github.com/hashicorp/terraform-plugin-framework/datasource"
+	"github.com/hashicorp/terraform-plugin-framework/function"
 	"github.com/hashicorp/terraform-plugin-framework/provider"
 	"github.com/hashicorp/terraform-plugin-framework/provider/schema"
 	"github.com/hashicorp/terraform-plugin-framework/resource"
@@ -11,7 +12,8 @@ import (
 
 // Ensure the implementation satisfies the expected interfaces.
 var (
-	_ provider.Provider = &sampleProvider{}
+	_ provider.Provider              = &sampleProvider{}
+	_ provider.ProviderWithFunctions = &sampleProvider{}
 )
 
 // New is a helper function to simplify provider server and testing implementation.
@@ -54,4 +56,10 @@ func (p *sampleProvider) DataSources(_ context.Context) []func() datasource.Data
 // Resources defines the resources implemented in the provider.
 func (p *sampleProvider) Resources(_ context.Context) []func() resource.Resource {
 	return nil
+}
+
+func (p *sampleProvider) Functions(_ context.Context) []func() function.Function {
+	return []func() function.Function{
+		NewExampleFunction,
+	}
 }
